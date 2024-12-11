@@ -1,35 +1,31 @@
 # -*- encoding: utf-8 -*-
 
 """
-A Set of Statistical Function(s) for :attr:`pd.DataFrame` Object
+A Collection of Function to Treat Data Outliers
 
-Statistics is the backbons for data anlytics and a collation of some
-important regularly used statistical methods are defined here. Check
-function documentation for more information.
+Outliers are extreme values that deviate from other observations on
+data, they may indicate a variability in a measurement, or experimental
+errors or a novelty. In other words, an outlier is an observation that
+diverges from an overall pattern on a sample.
+
+Outliers can be of two kinds: (I) univariate - typically found using
+looking at the distribution of a single feature, and
+(II) multivariate - determind by looking at the distributions of the
+n-dimensional features.
 """
 
 import numpy as np
 from scipy.stats import zscore
 
-def quantileOutliers(array : np.ndarray) -> np.ndarray:
+def quantile(array : np.ndarray, bounds : tuple = (0.25, 0.75)) -> np.ndarray:
     """
-    Outliers are extreme values that deviate from other observations
-    on data, they may indicate a variability in a measurement,
-    experimental errors or a novelty. In other words, an outlier is
-    an observation that diverges from an overall pattern on a sample.
-
-    Outliers can be of two kinds: (I) univariate - typically found
-    using looking at the distribution of a single feature, and
-    (II) multivariate - determind by looking at the distributions of
-    the n-dimensional features.
-
     A quick measure to identify outlier for an univariate series is
     by using the IQR value (as in box-plot) which states that any
     value in range :math:`[(Q1 - 1.5 * IQR), (Q3 + 1.5 * IQR)]` is
     not an outlier.
     """
 
-    Q1, Q3 = np.quantile(array, 0.25), np.quantile(array, 0.75)
+    Q1, Q3 = np.quantile(array, bounds[0]), np.quantile(array, bounds[1])
 
     IQR = Q3 - Q1 # interquartile range, or the box length
     return np.array([
@@ -41,18 +37,8 @@ def quantileOutliers(array : np.ndarray) -> np.ndarray:
     ])
 
 
-def zscoreOutliers(array : np.ndarray, thresh : float = 2.0) -> np.ndarray:
+def zscore(array : np.ndarray, thresh : float = 2.0) -> np.ndarray:
     """
-    Outliers are extreme values that deviate from other observations
-    on data, they may indicate a variability in a measurement,
-    experimental errors or a novelty. In other words, an outlier is
-    an observation that diverges from an overall pattern on a sample.
-
-    Outliers can be of two kinds: (I) univariate - typically found
-    using looking at the distribution of a single feature, and
-    (II) multivariate - determind by looking at the distributions of
-    the n-dimensional features.
-
     The Z-Score is a statistical value that describes the data points
     and establishes an relationship around the feature mean.
     """
