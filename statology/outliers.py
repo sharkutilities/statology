@@ -143,12 +143,10 @@ def quartile(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     boundary_range = rbound - lbound
 
     # the typically allowed values based on boundary condition::
-    lrange = (rbound + 1.5 * boundary_range)
-    rrange = (lbound - 1.5 * boundary_range)
+    lrange = lbound - 1.5 * boundary_range
+    rrange = rbound + 1.5 * boundary_range
 
-    return np.array([
-        (obs > lrange or obs < rrange) for obs in xs
-    ])
+    return (xs < lrange) | (xs > rrange)
 
 
 @decorator
