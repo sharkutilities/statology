@@ -12,6 +12,27 @@ Outliers can be of two kinds: (I) univariate - typically found using
 looking at the distribution of a single feature, and
 (II) multivariate - determind by looking at the distributions of the
 n-dimensional features.
+
+An outlier can be treated using different methods:
+
+    * **Trimming Method:** The outlier values are excluded from the
+        analysis, and typically this is the fastest among others.
+    * **Capping Method:** The outlier values are capped to a fixed
+        value. This value may be determined based on the nature of the
+        distribution of values.
+    * **Discretization Method:** In this method, values are bucketized
+        and assigned a value based on the discrete buckets.
+
+Methods of Detection
+--------------------
+
+There are several different methods of detection of outliers, based on
+the nature of distribution of the data. The popular methods are:
+
+    * **IQR:** Inter-Quartile Range (IQR) is a popular method of
+        detection and is particularly useful when the data is skewed.
+    * **Z-Score:** Statistical method involving detection of outlier
+        for normaly distributed values.
 """
 
 import numpy as np
