@@ -109,12 +109,12 @@ def quartile(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     lbound, rbound = np.quantile(xs, bounds[0]), np.quantile(xs, bounds[1])
     boundary_range = rbound - lbound
 
+    # the typically allowed values based on boundary condition::
+    lrange = (rbound + 1.5 * boundary_range)
+    rrange = (lbound - 1.5 * boundary_range)
+
     return np.array([
-        (
-            obs > (rbound + 1.5 * boundary_range)
-            or obs < (lbound - 1.5 * boundary_range)
-        )
-        for obs in xs
+        (obs > lrange or obs < rrange) for obs in xs
     ])
 
 
