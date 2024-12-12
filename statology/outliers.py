@@ -40,7 +40,7 @@ treatment like:
 """
 
 import numpy as np
-from scipy.stats import zscore
+from scipy import stats
 
 def decorator(func : callable) -> callable:
     """
@@ -118,11 +118,26 @@ def quartile(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     ])
 
 
-def zscore(array : np.ndarray, thresh : float = 2.0) -> np.ndarray:
+@decorator
+def zscore(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     """
     The Z-Score is a statistical value that describes the data points
-    and establishes an relationship around the feature mean.
+    and establishes an relationship around the feature mean. This
+    method is helpful when the data is normally distrubuted.
+
+    :type  xs: np.ndarray
+    :param xs: The input array to be checked for outliers using
+        different methods. This should be a numpy array, else the
+        function tries to stack the same into an array.
+
+    :type  bounds: float | tuple
+    :param bounds: The boundary value that controls the outlier. The
+        default setting is (-2.5, 2.5) which means the outliers are
+        bounded between :math:`[-2.5, 2.5]` of the normal distribution,
+        but can now be controlled using a tuple.
     """
 
-    scores = zscore(array)
-    return np.array(list(map(lambda x : abs(x) > thresh, scores)))
+    scores = stats.zscore(xs)
+    return np.array([
+        (score > bounds[1]) or (score < bounds[0]) for score in scores
+    ])
