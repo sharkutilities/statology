@@ -16,3 +16,4 @@ like :mod:`numpy`, :mod:`scipy.stats` etc.
 __version__ = "v0.0.1.dev0"
 
 # init-time options registrations
+from statology import outliers

@@ -13,16 +13,6 @@ looking at the distribution of a single feature, and
 (II) multivariate - determind by looking at the distributions of the
 n-dimensional features.
 
-An outlier can be treated using different methods:
-
-    * **Trimming Method:** The outlier values are excluded from the
-        analysis, and typically this is the fastest among others.
-    * **Capping Method:** The outlier values are capped to a fixed
-        value. This value may be determined based on the nature of the
-        distribution of values.
-    * **Discretization Method:** In this method, values are bucketized
-        and assigned a value based on the discrete buckets.
-
 Methods of Detection
 --------------------
 
@@ -33,28 +23,98 @@ the nature of distribution of the data. The popular methods are:
         detection and is particularly useful when the data is skewed.
     * **Z-Score:** Statistical method involving detection of outlier
         for normaly distributed values.
+
+Methods of Treatment
+--------------------
+
+Once an outlier is detected, there are several possible ways of
+treatment like:
+
+    * **Trimming Method:** The outlier values are excluded from the
+        analysis, and typically this is the fastest among others.
+    * **Capping Method:** The outlier values are capped to a fixed
+        value. This value may be determined based on the nature of the
+        distribution of values.
+    * **Discretization Method:** In this method, values are bucketized
+        and assigned a value based on the discrete buckets.
 """
 
 import numpy as np
 from scipy.stats import zscore
 
-def quantile(array : np.ndarray, bounds : tuple = (0.25, 0.75)) -> np.ndarray:
+def decorator(func : callable) -> callable:
+    """
+    The Base Decorator Function to Assert and Validate Elements
+
+    The decorator wraps the function with a try-except block, and also
+    asserts the value/dimensions in one place for better control.
+    """
+
+    def wrapper(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
+        """
+        The Wrapper on the Callable Function for the Decorator
+
+        The wrapper checks the dimension of the boundary values, and
+        asserts the value of the axis. The boundary and axis value are
+        also imputed to the callable function.
+
+        :type  xs: np.ndarray
+        :param xs: The input array to be checked for outliers using
+            different methods. This should be a numpy array, else the
+            function tries to stack the same into an array.
+
+        :type  bounds: float | tuple
+        :param bounds: The boundary values that controls the outlier
+            detection. Typically, this value should be a float meaning
+            the outliers are to be treated and identified from both
+            the left and right side of a normal distribution. However,
+            if the value is a tuple, then the left and right side are
+            given a different weightage. The decorator methods assigns
+            the default value based on different function calls.
+        """
+
+        xs = np.array(xs) if not isinstance(xs, np.ndarray) else xs
+
+        # ? default bounds are set in decorator based on function name
+        default_bounds = dict(quartile = (0.25, 0.75), zscore = (-2.5, 2.5))
+
+        bounds = default_bounds.get(func.__name__) if not bounds else bounds
+        bounds = (float(-bounds), float(bounds)) if not \
+            hasattr(bounds, "__iter__") else bounds
+
+        assert len(bounds) == 2, f"Boundary should be 2D, got {len(bounds)}"
+        return func(xs = xs, bounds = bounds)
+    return wrapper
+
+@decorator
+def quartile(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     """
     A quick measure to identify outlier for an univariate series is
     by using the IQR value (as in box-plot) which states that any
     value in range :math:`[(Q1 - 1.5 * IQR), (Q3 + 1.5 * IQR)]` is
     not an outlier.
+
+    :type  xs: np.ndarray
+    :param xs: The input array to be checked for outliers using
+        different methods. This should be a numpy array, else the
+        function tries to stack the same into an array.
+
+    :type  bounds: float | tuple
+    :param bounds: The boundary value that controls the outlier. The
+        default setting is (0.25, 0.75) which means the outliers are
+        bounded between :math:`[(Q1 - 1.5 * IQR), (Q3 + 1.5 * IQR)]`,
+        but can now be controlled using a tuple.
     """
 
-    Q1, Q3 = np.quantile(array, bounds[0]), np.quantile(array, bounds[1])
+    lbound, rbound = np.quantile(xs, bounds[0]), np.quantile(xs, bounds[1])
+    boundary_range = rbound - lbound
 
-    IQR = Q3 - Q1 # interquartile range, or the box length
     return np.array([
         (
-            obs > (Q3 + 1.5 * IQR)
-            or obs < (Q1 - 1.5 * IQR)
+            obs > (rbound + 1.5 * boundary_range)
+            or obs < (lbound - 1.5 * boundary_range)
         )
-        for obs in array
+        for obs in xs
     ])
 
 
