@@ -169,6 +169,4 @@ def zscore(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     """
 
     scores = stats.zscore(xs)
-    return np.array([
-        (score > bounds[1]) or (score < bounds[0]) for score in scores
-    ])
+    return (scores < bounds[0]) | (scores > bounds[1])
