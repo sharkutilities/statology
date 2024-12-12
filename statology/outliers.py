@@ -50,7 +50,7 @@ def decorator(func : callable) -> callable:
     asserts the value/dimensions in one place for better control.
     """
 
-    def wrapper(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
+    def wrapper(xs : np.ndarray, bounds : float | tuple = None, **kwargs) -> np.ndarray:
         """
         The Wrapper on the Callable Function for the Decorator
 
@@ -78,13 +78,46 @@ def decorator(func : callable) -> callable:
         # ? default bounds are set in decorator based on function name
         default_bounds = dict(quartile = (0.25, 0.75), zscore = (-2.5, 2.5))
 
-        bounds = default_bounds.get(func.__name__) if not bounds else bounds
-        bounds = (float(-bounds), float(bounds)) if not \
+        bounds = default_bounds.get(func.__name__) if not bounds else \
+            (float(-bounds), float(bounds)) if not \
             hasattr(bounds, "__iter__") else bounds
 
         assert len(bounds) == 2, f"Boundary should be 2D, got {len(bounds)}"
-        return func(xs = xs, bounds = bounds)
+
+        retvalue = func(xs = xs, bounds = bounds)
+
+        # ? the following keyword argument controls are defined for
+        # ? outlier data treatment methods: trimming, capping, etc.
+        rtype = kwargs.get("rtype", bool) # return true/false array
+        treat = kwargs.get("treatment", "capping") # treatment method
+
+        if rtype != bool:
+            iterable = zip(xs, retvalue)
+
+            if treat == "trimming":
+                retvalue = np.array([x for x, c in iterable if not c])
+            elif treat == "capping":
+                # ? set the capping value (static/clipping) value
+                capping = kwargs.get("capping", np.nan)
+
+                if not hasattr(capping, "__iter__"):
+                    retvalue = np.array([
+                        x if not c else capping for x, c in iterable
+                    ])
+                else:
+                    retvalue = np.clip(xs, *capping)
+            elif treat == "discretization":
+                raise NotImplementedError("Apply Externally.")
+            else:
+                raise ValueError(f"Unknown Treatment Method: {treat}")
+
+            retvalue = np.array(retvalue, dtype = rtype)
+        else:
+            pass # already boolean is returned by decorated function(s)
+
+        return retvalue
     return wrapper
+
 
 @decorator
 def quartile(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
