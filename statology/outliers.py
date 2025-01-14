@@ -140,11 +140,14 @@ def quartile(xs : np.ndarray, bounds : float | tuple = None) -> np.ndarray:
     """
 
     lbound, rbound = np.quantile(xs, bounds[0]), np.quantile(xs, bounds[1])
-    boundary_range = rbound - lbound
+
+    # ! the default IQR is calculated, while the allowed range is
+    # modified based on the boundaries which is user defined quartiles
+    Q1, Q3 = np.quantile(xs, 0.25), np.quantile(xs, 0.75)
 
     # the typically allowed values based on boundary condition::
-    lrange = lbound - 1.5 * boundary_range
-    rrange = rbound + 1.5 * boundary_range
+    lrange = lbound - 1.5 * (Q3 - Q1)
+    rrange = rbound + 1.5 * (Q3 - Q1)
 
     return (xs < lrange) | (xs > rrange)
 
