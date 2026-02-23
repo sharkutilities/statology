@@ -55,6 +55,10 @@ under `h3` tags, while the `micro` and "version identifiers" are listed under `h
 The library is designed to provide a simple interface between different modules and to perform statistical operations on an
 array (`numpy.ndarray`, `pandas.Series`, etc.) by using wrapper (context manager) controls.
 
+#### v1.0.1 | Release Date : 2026-02-23
+
+Minor bug fixes and updates to dependent package requirements.
+
 #### v1.0.0 | Release Date : 2026-02-23
 
 The first stable version of **`statology`** that can work as a wrapper to calculate outliers from a data series based on the
