@@ -3,17 +3,13 @@
 """
 A Collection of Statistical Function(s)
 
-Statistics is the backbone of Data Science and Analytics and the module exposes
-a collection of functions which acts as a wrapper between external libraries
-like :mod:`numpy`, :mod:`scipy.stats` etc.
-
-@author: Debmalya Pramanik
-@copywright: 2024; SharkUtilities, ZenithClown
+Statistics is the backbone of Data Science and Analytics and the
+module exposes a simple collection of functions which acts as a
+wrapper between external libraries like :mod:`numpy`,
+:mod:`scipy.stats`, :mod:`pandas` etc. for a quick calculation.
 """
 
-# ? package follows https://peps.python.org/pep-0440/
-# ? https://python-semver.readthedocs.io/en/latest/advanced/convert-pypi-to-semver.html
-__version__ = "v0.0.1.dev0"
+__version__ = "v0.0.1.dev0" # PEP-0440 Versioning Style
 
 # init-time options registrations
 from statology import outliers
