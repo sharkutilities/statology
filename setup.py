@@ -25,7 +25,7 @@ setup(
         exclude = ["tests*", "examples*"]
     ),
     install_requires = [
-        "numpy==2.4.2",
+        "numpy>=2.3.5",
         "scipy==1.17.1",
     ],
     classifiers = [
