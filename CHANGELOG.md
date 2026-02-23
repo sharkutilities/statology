@@ -55,17 +55,18 @@ under `h3` tags, while the `micro` and "version identifiers" are listed under `h
 The library is designed to provide a simple interface between different modules and to perform statistical operations on an
 array (`numpy.ndarray`, `pandas.Series`, etc.) by using wrapper (context manager) controls.
 
-#### v1.0.1 | Release Date : 2026-02-23
+#### v1.1.0 | Release Date : 2026-02-23
 
-Minor bug fixes and updates to dependent package requirements.
-
-#### v1.0.0 | Release Date : 2026-02-23
-
-The first stable version of **`statology`** that can work as a wrapper to calculate outliers from a data series based on the
-type of requirement. The following features are now available:
+The first stable version of **`statology`** that can work as a wrapper to perform statistical operations on external modules,
+or can work standalone using `numpy.ndarray`. The following features are now available:
 
   * 🎉 Calculate outliers (`statology.outliers`) using IQR or Z-Score and return boolean,
   * 🎉 Flexibility to control boundary for both type of outlier detection if a forward integration module works in an
     unconventional way or does not follow thumb-rules.
+  * 🎉 Create a function to return weighted average sum product of a series, this method is particularly helpful in financial
+    accounting.
+
+NOTE: There were two internal releases which were deleted from PyPI due to incompatibility issues, users are requested to
+migrate to the latest version.
 
 </div>
