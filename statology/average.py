@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 """
-A Set of Function(s) to Collate/Aggregate based on Logic
+A Set of Function(s) to Aggregate Array based on a Logic
 
 A simple example of aggregation is the statistical measures like
 :attr:`mean`, :attr:`median`, etc. Additional in-frequently but
@@ -11,7 +11,12 @@ popular aggregation functions are defined here for end-users.
 import numpy as np
 from typing import Union, Callable
 
-def weightedMA(initial : float, rate : Union[float, Callable], length : int, decay : bool = True) -> np.ndarray:
+def sum_product(
+        xs : np.ndarray,
+        initial : float,
+        rate : Union[float, Callable],
+        decay : bool = True
+    ) -> float:
     """
     Collate a Series based on Weighted Moving Average (WMA) Method
 
@@ -19,6 +24,12 @@ def weightedMA(initial : float, rate : Union[float, Callable], length : int, dec
     analysis, which gives more weightage to the recent data and
     produces a smoother line (sometimes) giving a more accurate picture
     of the underlying data trend.
+
+    :type  xs: np.ndarray
+    :param xs: The input data array which is multiplied against a
+        weight values by creating a factors of same shape as the
+        input array. The function gives the flexibility to work for
+        an n-dimensional :mod:`numpy` array based on length.
 
     :type  initial: float
     :param initial: The initial weighteage of the value, typically
@@ -34,11 +45,6 @@ def weightedMA(initial : float, rate : Union[float, Callable], length : int, dec
         value is calculated like :attr:`n_1 = rate(n_0)` thus allow
         more control and dynamic approach.
 
-    :type  length: int
-    :param length: Length of the window, this enables a quick
-        summarization of the final outcome using `x * weightedMA()`,
-        where :attr:`x` is also a n-dimensional :attr:`numpy` array.
-
     :type  decay: bool
     :param decay: When true (default) the returned array will be
         reveresed, i.e., it will give more priority to the recent
@@ -48,11 +54,11 @@ def weightedMA(initial : float, rate : Union[float, Callable], length : int, dec
     """
 
     factors = [initial] # append the initial values, and then calculate
-    for _ in range(length - 1):
+    for _ in range(len(xs) - 1):
         factors.append(
             rate(factors[-1]) if hasattr(rate, "__call__")
             else factors[-1] / rate
         )
 
     factors = np.array(factors)
-    return factors[::-1] if not decay else factors
+    return np.sum((factors[::-1] if not decay else factors) * xs)
