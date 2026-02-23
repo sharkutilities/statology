@@ -1,0 +1,61 @@
+[build-system]
+requires = [
+    "numpy==2.4.2",
+    "scipy==1.17.1",
+    "setuptools==82.0.0",
+    "wheel==0.46.3",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "statology"
+dynamic = ["version"]
+authors = [
+  { name = "shark-utilities developers", email = "neuralNOD@outlook.com" }
+]
+description = "A unified codebase for fetching FOREX rates."
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.11"
+license = {file = "LICENSE" }
+keywords = [
+    "statistics", "outliers", "pandas", "numpy", "scipy",
+    "wrappers", "data science", "data analysis", "data scientist", "data analyst"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "numpy==2.4.2",
+    "scipy==1.17.1",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/sharkutilities/statology"
+"Issue Tracker" = "https://github.com/sharkutilities/statology/issues"
+"Org. Homepage" = "https://github.com/sharkutilities"
+
+[tool.setuptools]
+py-modules = []
+
+[tool.setuptools.packages.find]
+exclude = ["tests*", "examples*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "statology.__version__"}
