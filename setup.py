@@ -18,8 +18,8 @@ setup(
     author = "shark-utilities developers",
     author_email = "neuralNOD@outlook.com",
     description = "A unified codebase for fetching FOREX rates.",
-    long_description = open("README.md", "r").read(),
-    long_description_content_type = "text/markdown",
+    # long_description = open("README.md", "r").read(),
+    # long_description_content_type = "text/markdown",
     url = "https://github.com/sharkutilities/statology",
     packages = find_packages(
         exclude = ["tests*", "examples*"]
