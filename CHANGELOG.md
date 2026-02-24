@@ -55,12 +55,13 @@ under `h3` tags, while the `micro` and "version identifiers" are listed under `h
 The library is designed to provide a simple interface between different modules and to perform statistical operations on an
 array (`numpy.ndarray`, `pandas.Series`, etc.) by using wrapper (context manager) controls.
 
-#### v1.2.0 | Release Date : 2026-02-24
+#### v1.2.0...v1.2.1 | Release Date : 2026-02-24
 
 The version brings added functionalities, and other minor patches and bug fixes as below.
 
   * 💣 Renamed `sum_product()` to `weighted()`, change is necessary as it reflects the function use case.
   * 🎉 Added functionality to forecast for a longer interval based on two new additional parameters.
+  * 🛠️ Provided flexibility to return scalar value, and added data quality checks.
 
 #### v1.1.0 | Release Date : 2026-02-23
 
