@@ -9,7 +9,7 @@ wrapper between external libraries like :mod:`numpy`,
 :mod:`scipy.stats`, :mod:`pandas` etc. for a quick calculation.
 """
 
-__version__ = "v1.2.0" # PEP-0440 Versioning Style
+__version__ = "v1.2.1" # PEP-0440 Versioning Style
 
 # init-time options registrations
 from statology import average

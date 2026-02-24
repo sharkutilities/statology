@@ -17,7 +17,8 @@ def weighted(
         rate : Union[float, Callable],
         decay : bool = True,
         nforecast : int = 1,
-        moving : bool = True
+        moving : bool = True,
+        returnscalar : bool = True
     ) -> float:
     """
     Collate a Series based on Weighted Moving Average (WMA) Method
@@ -64,6 +65,11 @@ def weighted(
     :param moving: Toogle to move/shift the series in the forward
         calculation method, defaults to True. This method is only
         applicable to one dimensional array.
+
+    :type  returnscalar: bool
+    :param returnscalar: Return a scalar value instead of an array,
+        typically useful, when the length of forecast ``nforecast``
+        is one, this will return one value, default.
     """
 
     factors = [initial] # append the initial values, and then calculate
@@ -75,6 +81,17 @@ def weighted(
 
     factors = np.array(factors)
 
+    # ..versionadded:: v1.2.1 check data quality, raise error
+    assert (
+        (xs.ndim == 1 and nforecast > 1)
+        or (nforecast == 1)
+    ), f"Only 1-D is Supported for N-Forecast >= 1, got {xs.ndim}"
+
+    assert (
+        (returnscalar and nforecast == 1)
+        or (not returnscalar and nforecast >= 1)
+    ), f"Return Scalar = {returnscalar} and N-Forcast = {nforecast}"
+
     forecasts = []
     for _ in range(nforecast):
         forecast = np.sum((factors[::-1] if not decay else factors) * xs)
@@ -85,4 +102,5 @@ def weighted(
         else:
             continue
 
-    return np.array(forecasts)
+    forecasts = np.array(forecasts)
+    return forecasts[0] if returnscalar else forecasts
