@@ -11,11 +11,13 @@ popular aggregation functions are defined here for end-users.
 import numpy as np
 from typing import Union, Callable
 
-def sum_product(
+def weighted(
         xs : np.ndarray,
         initial : float,
         rate : Union[float, Callable],
-        decay : bool = True
+        decay : bool = True,
+        nforecast : int = 1,
+        moving : bool = True
     ) -> float:
     """
     Collate a Series based on Weighted Moving Average (WMA) Method
@@ -51,6 +53,17 @@ def sum_product(
         data points (where the :attr:`x` is sorted in ascending order),
         else typically returns a "growth" array where more weightage
         is given to the data which is older.
+
+    :type  nforecast: int
+    :param nforecast: Number of points to forecast based on the moving
+        average calculation, defaults to 1. Combine this with the
+        ``moving`` to calculate weighted moving average forecast for
+        the given series.
+
+    :type  moving: bool
+    :param moving: Toogle to move/shift the series in the forward
+        calculation method, defaults to True. This method is only
+        applicable to one dimensional array.
     """
 
     factors = [initial] # append the initial values, and then calculate
@@ -61,4 +74,15 @@ def sum_product(
         )
 
     factors = np.array(factors)
-    return np.sum((factors[::-1] if not decay else factors) * xs)
+
+    forecasts = []
+    for _ in range(nforecast):
+        forecast = np.sum((factors[::-1] if not decay else factors) * xs)
+        forecasts.append(forecast)
+
+        if moving:
+            xs = np.append(xs[1:], forecast)
+        else:
+            continue
+
+    return np.array(forecasts)
