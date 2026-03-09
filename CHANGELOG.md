@@ -55,6 +55,11 @@ under `h3` tags, while the `micro` and "version identifiers" are listed under `h
 The library is designed to provide a simple interface between different modules and to perform statistical operations on an
 array (`numpy.ndarray`, `pandas.Series`, etc.) by using wrapper (context manager) controls.
 
+#### v1.3.0 | Release Date : 2026-03-09
+
+Introducing `statology.normalize` a set of functions to perform different types of normalization on a given feature that
+can be used along with `pd.groupby(...).transform(...)` technique.
+
 #### v1.2.0...v1.2.1 | Release Date : 2026-02-24
 
 The version brings added functionalities, and other minor patches and bug fixes as below.
